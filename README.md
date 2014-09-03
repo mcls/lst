@@ -18,7 +18,7 @@ go get github.com/mcls/lst
 ### Example
 
 ```
-$ lst --level 2 activerecord/
+$ lst -l 2 activerecord/
 activerecord/
 |-- CHANGELOG.md
 |-- MIT-LICENSE
