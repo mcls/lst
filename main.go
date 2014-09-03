@@ -13,7 +13,7 @@ import (
 	"github.com/mcls/lst/tree"
 )
 
-var maxLevel = flag.Uint("level", 1, "Max. level of dirs to descend (0 = infinite)")
+var maxLevel = flag.Uint("l", 1, "Max. level of dirs to descend (0 = infinite)")
 var useAnsi = flag.Bool("A", false, "Print ANSI lines graphic indentation lines.")
 var showAll = flag.Bool("a", false, "List all files")
 var showOnlyDirs = flag.Bool("d", false, "Only list directories")
