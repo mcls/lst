@@ -6,17 +6,17 @@ import (
 	"path/filepath"
 )
 
+// Printer contains the options for printing the tree
 type Printer struct {
 	ShowAll      bool
 	ShowOnlyDirs bool
 	Out          io.Writer
 }
 
+// Print outputs the tree
 func (printer *Printer) Print(node *Node, maxLevel uint) {
 	if node.Level == 0 {
-		base, _ := os.Getwd()
-		path, _ := filepath.Rel(base, node.AbsPath)
-		printer.Out.Write([]byte(path + "\n"))
+		printer.printRelativePath(node.AbsPath)
 	}
 	nodes := node.Children()
 	if maxLevel > 0 && node.Level >= maxLevel {
@@ -24,18 +24,33 @@ func (printer *Printer) Print(node *Node, maxLevel uint) {
 	}
 
 	for _, node := range nodes {
-		if !printer.ShowAll && node.IsDotfile() {
+		if !printer.shouldPrintNode(&node) {
 			continue
-		}
-
-		if printer.ShowOnlyDirs && !node.FileInfo.IsDir() {
-			continue
-		}
-
-		printer.Out.Write([]byte(node.Line() + "\n"))
-
-		if node.FileInfo.IsDir() {
-			printer.Print(&node, maxLevel)
+		} else {
+			printer.printLine(node.Line())
+			if node.FileInfo.IsDir() {
+				printer.Print(&node, maxLevel)
+			}
 		}
 	}
+}
+
+func (printer *Printer) printLine(txt string) {
+	printer.Out.Write([]byte(txt + "\n"))
+}
+
+func (printer *Printer) printRelativePath(absPath string) {
+	base, _ := os.Getwd()
+	path, _ := filepath.Rel(base, absPath)
+	printer.printLine(path)
+}
+
+func (printer *Printer) shouldPrintNode(node *Node) bool {
+	if !printer.ShowAll && node.IsDotfile() {
+		return false
+	}
+	if printer.ShowOnlyDirs && !node.FileInfo.IsDir() {
+		return false
+	}
+	return true
 }

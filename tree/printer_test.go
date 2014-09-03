@@ -15,8 +15,8 @@ func SetupDirStructure(dirs map[string]os.FileMode) {
 	os.MkdirAll(base, 0777)
 
 	keys := make([]string, 0, len(dirs))
-	for d, _ := range dirs {
-		keys = append(keys, d)
+	for dir := range dirs {
+		keys = append(keys, dir)
 	}
 	sort.Strings(keys)
 
