@@ -1,7 +1,7 @@
 package tree
 
 import (
-	"io/ioutil"
+	"bytes"
 	"os"
 	"sort"
 	"strings"
@@ -36,13 +36,11 @@ func AssertTreeMatches(t *testing.T, p *Printer, dirs map[string]os.FileMode, ex
 	SetupDirStructure(dirs)
 
 	// Print tree
-	out, _ := ioutil.TempFile("", "testing")
+	out := new(bytes.Buffer)
 	p.Out = out
 	node, _ := NewNode(BaseTestPath())
 	p.Print(node, 0)
-	content, _ := ioutil.ReadFile(out.Name())
-	actual := string(content)
-	actualLines := strings.Split(actual, "\n")
+	actualLines := strings.Split(out.String(), "\n")
 
 	// Compare to expected output
 	for i, line := range expectedLines {
