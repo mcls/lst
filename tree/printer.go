@@ -19,10 +19,10 @@ func (printer *Printer) Print(node *Node, maxLevel uint) {
 	if node.Level == 0 {
 		printer.printRelativePath(node.AbsPath)
 	}
-	nodes := node.Children()
 	if maxLevel > 0 && node.Level >= maxLevel {
 		return
 	}
+	nodes := node.Children()
 
 	for _, node := range nodes {
 		if !printer.shouldPrintNode(node) {
