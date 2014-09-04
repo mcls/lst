@@ -25,12 +25,12 @@ func (printer *Printer) Print(node *Node, maxLevel uint) {
 	}
 
 	for _, node := range nodes {
-		if !printer.shouldPrintNode(&node) {
+		if !printer.shouldPrintNode(node) {
 			continue
 		} else {
 			printer.printLine(node.Line(printer.Style))
 			if node.FileInfo.IsDir() {
-				printer.Print(&node, maxLevel)
+				printer.Print(node, maxLevel)
 			}
 		}
 	}

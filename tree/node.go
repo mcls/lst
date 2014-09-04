@@ -79,7 +79,7 @@ func (node *Node) indentation(style *Style) string {
 }
 
 // Children returns all files nested in a directory as []Node
-func (node *Node) Children() []Node {
+func (node *Node) Children() []*Node {
 	entries, err := ioutil.ReadDir(node.AbsPath)
 	if err != nil {
 		fmt.Println("ERROR:", err)
@@ -87,9 +87,9 @@ func (node *Node) Children() []Node {
 		os.Exit(1)
 	}
 	// Wrap in Node struct
-	nodes := make([]Node, len(entries))
+	nodes := make([]*Node, len(entries))
 	for i, entry := range entries {
-		nodes[i] = Node{
+		nodes[i] = &Node{
 			FileInfo: entry,
 			Level:    node.Level + 1,
 			IsLast:   len(entries)-1 == i,
