@@ -11,6 +11,7 @@ type Printer struct {
 	ShowAll      bool
 	ShowOnlyDirs bool
 	Out          io.Writer
+	Style        *Style
 }
 
 // Print outputs the tree
@@ -27,7 +28,7 @@ func (printer *Printer) Print(node *Node, maxLevel uint) {
 		if !printer.shouldPrintNode(&node) {
 			continue
 		} else {
-			printer.printLine(node.Line())
+			printer.printLine(node.Line(printer.Style))
 			if node.FileInfo.IsDir() {
 				printer.Print(&node, maxLevel)
 			}

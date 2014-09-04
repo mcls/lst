@@ -70,6 +70,7 @@ func BaseTestPath() string {
 }
 
 func TestPrintingDir(t *testing.T) {
+	p := &Printer{ShowAll: false, ShowOnlyDirs: false, Style: NewRegularStyle()}
 	dirs := map[string]os.FileMode{
 		"mydir/":         0777,
 		"mydir/stuff.md": 0777,
@@ -85,6 +86,54 @@ func TestPrintingDir(t *testing.T) {
 		"|   `-- thing.md",
 		"`-- world.txt",
 	}
-	p := &Printer{ShowAll: false, ShowOnlyDirs: false}
+	AssertTreeMatches(t, p, dirs, expectedTree)
+
+	dirs = map[string]os.FileMode{
+		"mydir/":               0777,
+		"mydir/stuff.md":       0777,
+		"mydir/thing.md":       0777,
+		"mydir/more/":          0777,
+		"mydir/more/stuff.md":  0777,
+		"mydir/more/and.md":    0777,
+		"mydir/more/things.md": 0777,
+		"zzz/":                 0777,
+		"zzz/naps.txt":         0777,
+		"zzz/sleep.txt":        0777,
+	}
+	expectedTree = []string{
+		".",
+		"|-- mydir/",
+		"|   |-- more/",
+		"|   |   |-- and.md",
+		"|   |   |-- stuff.md",
+		"|   |   `-- things.md",
+		"|   |-- stuff.md",
+		"|   `-- thing.md",
+		"`-- zzz/",
+		"    |-- naps.txt",
+		"    `-- sleep.txt",
+	}
+	AssertTreeMatches(t, p, dirs, expectedTree)
+
+	p.Style = NewAnsiStyle()
+	dirs = map[string]os.FileMode{
+		"mydir/":               0777,
+		"mydir/thing.md":       0777,
+		"mydir/more/":          0777,
+		"mydir/more/things.md": 0777,
+		"zzz/":                 0777,
+		"zzz/naps.txt":         0777,
+		"zzz/sleep.txt":        0777,
+	}
+	expectedTree = []string{
+		".",
+		"├── mydir/",
+		"│   ├── more/",
+		"│   │   └── things.md",
+		"│   └── thing.md",
+		"└── zzz/",
+		"    ├── naps.txt",
+		"    └── sleep.txt",
+	}
 	AssertTreeMatches(t, p, dirs, expectedTree)
 }

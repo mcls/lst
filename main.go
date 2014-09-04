@@ -28,17 +28,17 @@ func main() {
 		dir = args[0]
 	}
 
-	// Determine tree style
-	if *useAnsi {
-		tree.SetStyle(tree.NewAnsiStyle())
-	} else {
-		tree.SetStyle(tree.NewRegularStyle())
-	}
-
 	printer := &tree.Printer{
 		Out:          os.Stdout,
 		ShowAll:      *showAll,
 		ShowOnlyDirs: *showOnlyDirs}
+
+	// Determine tree style
+	if *useAnsi {
+		printer.Style = tree.NewAnsiStyle()
+	} else {
+		printer.Style = tree.NewRegularStyle()
+	}
 
 	// Initialize and print tree
 	node, err := tree.NewNode(dir)

@@ -1,7 +1,5 @@
 package tree
 
-var style = NewRegularStyle()
-
 // Style determines how the tree is drawn
 type Style struct {
 	middle          string
@@ -27,9 +25,4 @@ func NewAnsiStyle() *Style {
 		last:            "└── ",
 		indentNested:    "│   ",
 		indentNotNested: "    "}
-}
-
-// SetStyle sets the global style for drawing a tree
-func SetStyle(value *Style) {
-	style = value
 }
